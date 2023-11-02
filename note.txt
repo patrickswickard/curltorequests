@@ -1,0 +1,5 @@
+    self.setRequestAction('https://www.instagram.com/graphql/query/')
+    @param = {
+        'doc_id' => '17991233890457762',
+        'variables' => '{"id":"61247467864","after":"QVFDNlR2SFNibHlyR1VjekYxejdHeERVYWcxekhmWHZ5ZWJtY2JBa1dQMWpwYURkb0xFVDlncEZ2U1VZTEZrMXM0bHBBZ3UwQlhZSTZlWV9oVlJXRFN5dQ==","first":12}',
+    }
