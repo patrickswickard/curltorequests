@@ -3,3 +3,10 @@
         'doc_id' => '17991233890457762',
         'variables' => '{"id":"61247467864","after":"QVFDNlR2SFNibHlyR1VjekYxejdHeERVYWcxekhmWHZ5ZWJtY2JBa1dQMWpwYURkb0xFVDlncEZ2U1VZTEZrMXM0bHBBZ3UwQlhZSTZlWV9oVlJXRFN5dQ==","first":12}',
     }
+
+
+variables id is the owner id, after is maybe the page_info->end_cursor
+what is doc_id?  mystery number, may be stopper for getting more than 12
+
+
+curl -H "Host: www.instagram.com" -H "Cookie: csrftoken=q7gGcWsRKiebS9NRulvzwIJBAozShRU1; mid=ZUOwkQAEAAFGNCOTMv1JVnDjjL4Z; ig_did=4269F206-776D-45B2-A70A-D850A1F266A2; ig_nrcb=1; datr=jrBDZYFolnkcmO1HudPSDYCs" -H "user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0" -H "accept: */*" -H "accept-language: en-US,en;q=0.5" -H "x-csrftoken: q7gGcWsRKiebS9NRulvzwIJBAozShRU1" -H "x-ig-app-id: 936619743392459" -H "x-asbd-id: 129477" -H "x-ig-www-claim: 0" -H "x-requested-with: XMLHttpRequest" -H "referer: https://www.instagram.com/vintage_bmore_graffiti/" -H "sec-fetch-dest: empty" -H "sec-fetch-mode: cors" -H "sec-fetch-site: same-origin" -H "te: trailers" --compressed "https://www.instagram.com/graphql/query/?doc_id=17991233890457762&variables=%7B%22id%22%3A%2261247467864%22%2C%22after%22%3A%22QVFDNlR2SFNibHlyR1VjekYxejdHeERVYWcxekhmWHZ5ZWJtY2JBa1dQMWpwYURkb0xFVDlncEZ2U1VZTEZrMXM0bHBBZ3UwQlhZSTZlWV9oVlJXRFN5dQ%3D%3D%22%2C%22first%22%3A12%7D"
