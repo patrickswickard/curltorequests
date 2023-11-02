@@ -11,11 +11,11 @@ with open(file) as fd:
     for thisheader in headers:
       header_pair = re.findall(r"^(.*?):\s*(.*)$",thisheader)
       header_name = header_pair[0][0]
-      print('***************')
+#      print('***************')
       header_value = header_pair[0][1]
-      print(header_name)
-      print(header_value)
-      print('---------------')
+#      print(header_name)
+#      print(header_value)
+#      print('---------------')
       header_hash[header_name] = header_value
 
 request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=vintage_bmore_graffiti'
