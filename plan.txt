@@ -1,0 +1,11 @@
+Do three requests
+
+1.  https://www.instagram.com/USERNAME/
+
+take response and grab the user id and the app id
+
+2.  minimal equivalent of curl request
+
+grab the token which becomes after in next request
+
+3.  minimal equivalent of curl request for more results, play with number or decide if you repeat this
