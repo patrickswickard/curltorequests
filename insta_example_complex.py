@@ -7,6 +7,7 @@ import json
 
 file = 'curlcmd.txt'
 header_hash = {}
+header_hash['x-ig-app-id'] = '936619743392459'
 with open(file) as fd:
   lines = fd.read().splitlines()
   for thisline in lines:
@@ -20,8 +21,8 @@ with open(file) as fd:
 #      print(header_name)
 #      print(header_value)
 #      print('---------------')
-      header_hash[header_name] = header_value
-
+#      header_hash[header_name] = header_value
+      #header_hash['x-ig-app-id'] = '936619743392459'
 #request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=vintage_bmore_graffiti'
 request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=cannibal_corpse_limericks'
 
