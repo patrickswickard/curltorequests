@@ -5,7 +5,7 @@ import json
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
 username = 'bugbobbie'
-username = 'dont_fear_the_millimeter'
+#username = 'dont_fear_the_millimeter'
 
 def get_app_id(username):
   debug = False
@@ -104,8 +104,12 @@ doc_id = '17991233890457762'
 user_id = get_user_id_from_response_hash(response_hash)
 end_cursor = get_end_cursor_from_response_hash(response_hash)
 num = '50'
-next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
-print_links_from_response_hash(next_response_hash)
+
+if end_cursor:
+  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
+  print_links_from_response_hash(next_response_hash)
+else:
+  print('That is all!')
 
 # another round anyone?
 
@@ -113,8 +117,12 @@ doc_id = '17991233890457762'
 user_id = user_id
 end_cursor = get_end_cursor_from_response_hash(next_response_hash)
 num = '50'
-next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
-print_links_from_response_hash(next_response_hash)
+
+if end_cursor:
+  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
+  print_links_from_response_hash(next_response_hash)
+else:
+  print('That is all!')
 
 # another round anyone?
 
@@ -122,6 +130,10 @@ doc_id = '17991233890457762'
 user_id = user_id
 end_cursor = get_end_cursor_from_response_hash(next_response_hash)
 num = '50'
-next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
-print_links_from_response_hash(next_response_hash)
+
+if end_cursor:
+  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
+  print_links_from_response_hash(next_response_hash)
+else:
+  print('That is all!')
 
