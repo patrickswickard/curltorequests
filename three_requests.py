@@ -92,7 +92,7 @@ response_hash = get_first_set(username,app_id)
 doc_id = '17991233890457762'
 user_id = get_user_id_from_response_hash(response_hash)
 end_cursor = get_end_cursor_from_response_hash(response_hash)
-num = '100'
+num = '50'
 
 def get_next_response_hash(doc_id,user_id,end_cursor,num):
   if end_cursor:
@@ -110,22 +110,4 @@ next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
 
 print('!!!!!!!!!!!!!!!!!!!!!')
 
-def print_links_from_next_response_hash(next_response_hash):
-  data = next_response_hash['data']
-  user = data['user']
-  edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
-  page_info = edge_owner_to_timeline_media['page_info']
-  edges = edge_owner_to_timeline_media['edges']
-  has_next_page = page_info['has_next_page']
-  end_cursor = ''
-  if has_next_page:
-    end_cursor = page_info['end_cursor']
-
-  # this drills down and prints links to the full image for the top twelve results for this user
-  # only works for public since not using authentication
-  for thisedge in edges:
-    node = thisedge['node']
-    display_url = node['display_url']
-    print(display_url)
-
-print_links_from_next_response_hash(next_response_hash)
+print_links_from_response_hash(next_response_hash)
