@@ -43,7 +43,8 @@ print(app_id)
 
 request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=cannibal_corpse_limericks'
 header_hash = {}
-header_hash['x-ig-app-id'] = '936619743392459'
+#header_hash['x-ig-app-id'] = '936619743392459'
+header_hash['x-ig-app-id'] = app_id
 headers = header_hash
 response = requests.get(request_url, headers=headers)
 #print(response.text)
