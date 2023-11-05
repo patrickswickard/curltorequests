@@ -1,11 +1,20 @@
 import requests
 import re
 import json
+import shutil
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
 #username = 'bugbobbie'
 username = 'dont_fear_the_millimeter'
+
+# method to download a single photo, takes url as source and dl target as filename
+def download_single_photo(source,filename):
+  source = source
+  photo_filename = filename
+  url_response = requests.get(source, stream=True)
+  with open(photo_filename, 'wb') as out_file:
+    shutil.copyfileobj(url_response.raw, out_file)
 
 def get_app_id(username):
   debug = False
