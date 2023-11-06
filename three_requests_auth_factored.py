@@ -2,11 +2,16 @@ import requests
 import re
 import json
 import shutil
+import mysecret
 
-username = 'vintage_bmore_graffiti'
+#username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
 #username = 'bugbobbie'
-#username = 'dont_fear_the_millimeter'
+username = 'dont_fear_the_millimeter'
+
+secret = mysecret.Mysecret()
+sessionid = secret.sid
+print(sessionid)
 
 all_photos_list = []
 
@@ -46,14 +51,13 @@ def get_app_id(username):
         app_id = app_id_hits[0]
         return app_id
 
-def get_first_set(username,app_id):
+def get_first_set(username,app_id,sessionid):
   request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + username
   header_hash = {
   }
   # this is probably hard-coded but we parse it anyway
   # if/when this breaks try the hard-coded version
   #header_hash['x-ig-app-id'] = '936619743392459'
-  sessionid = '61247467864:QjScDRfinWftSQ%3A8%3AAYeBWdjl72x1BlG3IxhmLc2QNJRl4pZznA_p6CV8-Q'
   header_hash['Cookie'] = 'sessionid=' + sessionid + '; ds_user_id=CAFE'
   header_hash['x-ig-app-id'] = app_id
   headers = header_hash
@@ -110,12 +114,11 @@ def get_end_cursor_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   return end_cursor
 
-def get_next_response_hash(doc_id,user_id,end_cursor,num):
+def get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid):
   if end_cursor:
     request_url = 'https://www.instagram.com/graphql/query/?doc_id=' + doc_id + '&variables=%7B%22id%22%3A%22' + user_id + '%22%2C%22after%22%3A%22' + end_cursor + '%22%2C%22first%22%3A' + num + '%7D'
     header_hash = {
     }
-    sessionid = '61247467864:QjScDRfinWftSQ%3A8%3AAYeBWdjl72x1BlG3IxhmLc2QNJRl4pZznA_p6CV8-Q'
     header_hash['Cookie'] = 'sessionid=' + sessionid + '; ds_user_id=CAFE'
     header_hash['x-ig-app-id'] = app_id
     headers = header_hash
@@ -124,7 +127,7 @@ def get_next_response_hash(doc_id,user_id,end_cursor,num):
     return response_hash
 
 app_id = get_app_id(username)
-response_hash = get_first_set(username,app_id)
+response_hash = get_first_set(username,app_id,sessionid)
 print_links_from_response_hash(response_hash)
 this_list = list_links_from_response_hash(response_hash)
 all_photos_list = all_photos_list + this_list
@@ -136,7 +139,7 @@ end_cursor = get_end_cursor_from_response_hash(response_hash)
 num = '50'
 
 while end_cursor:
-  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num)
+  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid)
   print_links_from_response_hash(next_response_hash)
   this_list = list_links_from_response_hash(next_response_hash)
   all_photos_list = all_photos_list + this_list
@@ -148,6 +151,6 @@ while end_cursor:
 
 print('GROOGROOGROOGROOGROOGROOGROO')
 print(json.dumps(all_photos_list))
-outfilename = 'all_photos_list.json'
+outfilename = 'all_photos_list2.json'
 thisoutfile = open(outfilename, 'w')
 thisoutfile.write(json.dumps(all_photos_list))

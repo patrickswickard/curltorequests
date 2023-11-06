@@ -2,7 +2,7 @@ import requests
 import re
 import json
 import shutil
-
+import time
 
 # method to download a single photo, takes url as source and dl target as filename
 def download_single_photo(source,filename):
@@ -13,7 +13,7 @@ def download_single_photo(source,filename):
     shutil.copyfileobj(url_response.raw, out_file)
 
 all_photo_list = []
-file = 'all_photos_list.json'
+file = 'cache/all_photos_list.json'
 with open(file) as fd:
   lines = fd.read().splitlines()
   for thisline in lines:
@@ -34,7 +34,8 @@ for thisphotolink in all_photo_list:
     countpad = ''
   print(thisphotolink)
   print(str(count))
-  outfilename = 'cache/photo_vbg_' + countpad + str(count) + '.jpg'
+  outfilename = 'cache/photo_dftm_' + countpad + str(count) + '.jpg'
   print(outfilename)
   print('Downloading')
+  time.sleep(1)
   download_single_photo(thisphotolink,outfilename)
