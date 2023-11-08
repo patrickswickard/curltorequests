@@ -1,6 +1,6 @@
-curl -H "Host: www.instagram.com" -H "Cookie: sessionid=51247467864%3AQjScDRfinWftSQ%3A8%3AAYeBWdjl72x1BlG3IxhmLc2QNJRl4pZznA_p6CV8-Q; ds_user_id=61247467864" -H "x-ig-app-id: 936619743392459" "https://www.instagram.com/api/v1/users/web_profile_info/?username=bugbobbie"
+curl -H "Host: www.instagram.com" -H "Cookie: sessionid=FAKEFAKEREPLACEME; ds_user_id=61247467864" -H "x-ig-app-id: 936619743392459" "https://www.instagram.com/api/v1/users/web_profile_info/?username=bugbobbie"
 
-curl -H "Host: www.instagram.com" -H "Cookie: sessionid=51247467864%3AQjScDRfinWftSQ%3A8%3AAYeBWdjl72x1BlG3IxhmLc2QNJRl4pZznA_p6CV8-Q; ds_user_id=CAFE" -H "x-ig-app-id: 936619743392459" "https://www.instagram.com/api/v1/users/web_profile_info/?username=bugbobbie"
+curl -H "Host: www.instagram.com" -H "Cookie: sessionid=FAKEFAKEREPLACEME; ds_user_id=CAFE" -H "x-ig-app-id: 936619743392459" "https://www.instagram.com/api/v1/users/web_profile_info/?username=bugbobbie"
 
 user_id must be present, can be bogus or empty
 x-ig-app-id must be present and accurate but hard-coded likely

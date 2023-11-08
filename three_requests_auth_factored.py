@@ -151,6 +151,6 @@ while end_cursor:
 
 print('GROOGROOGROOGROOGROOGROOGROO')
 print(json.dumps(all_photos_list))
-outfilename = 'all_photos_list2.json'
+outfilename = 'all_photos_list3.json'
 thisoutfile = open(outfilename, 'w')
 thisoutfile.write(json.dumps(all_photos_list))
