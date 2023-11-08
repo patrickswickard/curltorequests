@@ -11,12 +11,15 @@ username = 'dont_fear_the_millimeter'
 
 secret = mysecret.Mysecret()
 sessionid = secret.sid
-print(sessionid)
+#print(sessionid)
 
 all_photos_list = []
 
 #tempoutfile = open('TEMPJSONOUTFILE.json', 'w')
 #tempoutfile.write(json.dumps(THISTHINGIE))
+
+temphash = {}
+temphash['count'] = 0
 
 # method to download a single photo, takes url as source and dl target as filename
 def download_single_photo(source,filename):
@@ -81,11 +84,13 @@ def print_links_from_response_hash(response_hash):
   if has_next_page:
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
+#    temphash['count'] += 1
+#    print(str(temphash['count']))
     node = thisedge['node']
     display_url = node['display_url']
-    print(display_url)
+#    print(display_url)
 
-def list_links_from_response_hash(response_hash):
+def list_links_from_response_hash(response_hash,temphash):
   batch_list = []
   data = response_hash['data']
   user = data['user']
@@ -97,8 +102,11 @@ def list_links_from_response_hash(response_hash):
   if has_next_page:
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
+    temphash['count'] += 1
+    print(str(temphash['count']))
     node = thisedge['node']
     display_url = node['display_url']
+    print(display_url)
     if node.get('accessibility_caption',''):
       accessibility_caption = node['accessibility_caption']
       print(accessibility_caption)
@@ -144,7 +152,7 @@ def get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid):
 app_id = get_app_id(username)
 response_hash = get_first_set(username,app_id,sessionid)
 print_links_from_response_hash(response_hash)
-this_list = list_links_from_response_hash(response_hash)
+this_list = list_links_from_response_hash(response_hash,temphash)
 all_photos_list = all_photos_list + this_list
 
 # hard-coded, hopefully always the same
@@ -156,16 +164,16 @@ num = '50'
 while end_cursor:
   next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid)
   print_links_from_response_hash(next_response_hash)
-  this_list = list_links_from_response_hash(next_response_hash)
+  this_list = list_links_from_response_hash(next_response_hash,temphash)
   all_photos_list = all_photos_list + this_list
   doc_id = doc_id
   user_id = user_id
   end_cursor = get_end_cursor_from_response_hash(next_response_hash)
   num = '50'
-  print('!!!!!!!!!!!!!!!')
+#  print('!!!!!!!!!!!!!!!')
 
-print('GROOGROOGROOGROOGROOGROOGROO')
-print(json.dumps(all_photos_list))
+#print('GROOGROOGROOGROOGROOGROOGROO')
+#print(json.dumps(all_photos_list))
 outfilename = 'all_photos_list4.json'
 thisoutfile = open(outfilename, 'w')
 thisoutfile.write(json.dumps(all_photos_list))
