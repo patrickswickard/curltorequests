@@ -4,6 +4,8 @@ import json
 import shutil
 import mysecret
 
+# this is hacked together to get captions, should refactor to grab all possible info and then just use what we need
+
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
 #username = 'bugbobbie'
