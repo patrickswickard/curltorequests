@@ -3,6 +3,7 @@ import re
 import json
 import shutil
 import mysecret
+import time
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
@@ -81,6 +82,7 @@ def print_links_from_response_hash(response_hash):
     print(display_url)
 
 def list_links_from_response_hash(response_hash):
+  time.sleep(5)
   batch_list = []
   data = response_hash['data']
   user = data['user']
@@ -124,7 +126,9 @@ def list_links_from_response_hash(response_hash):
           thissubnode = thissubpost.get('node',{})
           if thissubnode:
             subdisplayurl = thissubnode.get('display_url')
-            sidecar_to_children_list.append(subdisplayurl)
+            thatpost = {}
+            thatpost['display_url'] = subdisplayurl
+            sidecar_to_children_list.append(thatpost)
     batch_list.append(display_url)
   return batch_list
 
