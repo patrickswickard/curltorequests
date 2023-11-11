@@ -8,8 +8,8 @@ import instapost
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
-#username = 'bugbobbie'
-username = 'dont_fear_the_millimeter'
+username = 'bugbobbie'
+#username = 'dont_fear_the_millimeter'
 
 secret = mysecret.Mysecret()
 sessionid = secret.sid
@@ -83,43 +83,56 @@ def print_links_from_response_hash(response_hash):
     print(display_url)
 
 def process_post(thispost):
+  post = instapost.Instapost()
   dimensions = thispost.get('dimensions',{})
   if dimensions:
     height = dimensions.get('height','')
     width = dimensions.get('width','')
+  post.width = width
+  post.height = height
   display_url = thispost.get('display_url','')
+  post.display_url = display_url
   is_video = thispost.get('is_video',False)
+  post.is_video = is_video
   tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
+  post.tagged_user_list = tagged_user_list
   accessibility_caption = thispost.get('accessibility_caption','')
+  post.accessibility_caption = accessibility_caption
   caption = ''
   if thispost.get('edge_media_to_caption',''):
     captionlist = thispost['edge_media_to_caption']['edges']
     if captionlist:
       caption = captionlist[0]
+  post.caption = caption
   userid = ''
   username = ''
   owner = thispost.get('owner',{})
   if owner:
     userid = owner.get('id','')
     username = owner.get('username','')
+  post.userid = userid
+  post.username = username
   location = thispost.get('location','')
+  post.location = location
   posts_beyond_first = []
   sidecar_to_children_list = []
   sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
   if sidecar_to_children:
+    print('TAKE YOUR HAT OFF YOU OAF')
+    print(sidecar_to_children)
     sidecar_to_children_list = sidecar_to_children.get('edges',[])
     if sidecar_to_children_list:
-      for thissubpost in sidecar_to_children_list:
-        thissubnode = thissubpost.get('node',{})
-        if thissubnode:
-          subdisplayurl = thissubnode.get('display_url')
-          thatpost = {}
-          thatpost['display_url'] = subdisplayurl
-          sidecar_to_children_list.append(thatpost)
-  return thispost
+      print('OH WELL I TRIED')
+      #for thissubpost in sidecar_to_children_list:
+      #  thissubnode = thissubpost.get('node',{})
+      #  if thissubnode:
+      #    thatpost = process_post(thissubnode)
+      #    sidecar_to_children_list.append(thatpost)
+  post.sidecar_to_children_list = sidecar_to_children_list
+  return post
 
 def list_links_from_response_hash(response_hash):
-#  time.sleep(1)
+  post_list = []
   batch_list = []
   data = response_hash['data']
   user = data['user']
@@ -132,46 +145,20 @@ def list_links_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
     node = thisedge['node']
-    thispost = node
+#    thispost = node
     # thispost will be a hash
-    post_object = process_post(thispost)
-    thispost = post_object
-#    dimensions = thispost.get('dimensions',{})
-#    if dimensions:
-#      height = dimensions.get('height','')
-#      width = dimensions.get('width','')
-#    display_url = thispost.get('display_url','')
-#    is_video = thispost.get('is_video',False)
-#    tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
-#    accessibility_caption = thispost.get('accessibility_caption','')
-#    caption = ''
-#    if node.get('edge_media_to_caption',''):
-#      captionlist = node['edge_media_to_caption']['edges']
-#      if captionlist:
-#        caption = captionlist[0]
-#    userid = ''
-#    username = ''
-#    owner = node.get('owner',{})
-#    if owner:
-#      userid = owner.get('id','')
-#      username = owner.get('username','')
-#    location = thispost.get('location','')
-#    posts_beyond_first = []
-#    sidecar_to_children_list = []
-#    sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
-#    if sidecar_to_children:
-#      sidecar_to_children_list = sidecar_to_children.get('edge',[])
-#      if sidecar_to_children_list:
-#        for thissubpost in sidecar_to_children_list:
-#          thissubnode = thissubpost.get('node',{})
-#          if thissubnode:
-#            subdisplayurl = thissubnode.get('display_url')
-#            thatpost = {}
-#            thatpost['display_url'] = subdisplayurl
-#            sidecar_to_children_list.append(thatpost)
-#    batch_list.append(display_url)
-    batch_list.append(thispost['display_url'])
-  return batch_list
+#    post_object = process_post(thispost)
+    post_object = process_post(node)
+    post_list.append(post_object)
+  for mypost in post_list:
+    batch_list.append(mypost.display_url)
+    for mysubpost in mypost.sidecar_to_children_list:
+      print('HELLO!')
+#CHANGEME
+#batch_list.append(mysubpost.display_url + '#LOOKATME')
+    batch_list.append(post_object.display_url)
+  #return batch_list
+  return post_list
 
 def get_user_id_from_response_hash(response_hash):
   data = response_hash['data']
@@ -226,7 +213,7 @@ while end_cursor:
   print('!!!!!!!!!!!!!!!')
 
 print('GROOGROOGROOGROOGROOGROOGROO')
-print(json.dumps(all_photos_list))
+#print(json.dumps(all_photos_list))
 outfilename = 'all_photos_list3.json'
 thisoutfile = open(outfilename, 'w')
-thisoutfile.write(json.dumps(all_photos_list))
+#thisoutfile.write(json.dumps(all_photos_list))

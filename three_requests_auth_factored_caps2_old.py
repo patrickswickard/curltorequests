@@ -4,7 +4,6 @@ import json
 import shutil
 import mysecret
 import time
-import instapost
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
@@ -82,44 +81,8 @@ def print_links_from_response_hash(response_hash):
     display_url = node['display_url']
     print(display_url)
 
-def process_post(thispost):
-  dimensions = thispost.get('dimensions',{})
-  if dimensions:
-    height = dimensions.get('height','')
-    width = dimensions.get('width','')
-  display_url = thispost.get('display_url','')
-  is_video = thispost.get('is_video',False)
-  tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
-  accessibility_caption = thispost.get('accessibility_caption','')
-  caption = ''
-  if thispost.get('edge_media_to_caption',''):
-    captionlist = thispost['edge_media_to_caption']['edges']
-    if captionlist:
-      caption = captionlist[0]
-  userid = ''
-  username = ''
-  owner = thispost.get('owner',{})
-  if owner:
-    userid = owner.get('id','')
-    username = owner.get('username','')
-  location = thispost.get('location','')
-  posts_beyond_first = []
-  sidecar_to_children_list = []
-  sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
-  if sidecar_to_children:
-    sidecar_to_children_list = sidecar_to_children.get('edges',[])
-    if sidecar_to_children_list:
-      for thissubpost in sidecar_to_children_list:
-        thissubnode = thissubpost.get('node',{})
-        if thissubnode:
-          subdisplayurl = thissubnode.get('display_url')
-          thatpost = {}
-          thatpost['display_url'] = subdisplayurl
-          sidecar_to_children_list.append(thatpost)
-  return thispost
-
 def list_links_from_response_hash(response_hash):
-#  time.sleep(1)
+  time.sleep(5)
   batch_list = []
   data = response_hash['data']
   user = data['user']
@@ -133,44 +96,40 @@ def list_links_from_response_hash(response_hash):
   for thisedge in edges:
     node = thisedge['node']
     thispost = node
-    # thispost will be a hash
-    post_object = process_post(thispost)
-    thispost = post_object
-#    dimensions = thispost.get('dimensions',{})
-#    if dimensions:
-#      height = dimensions.get('height','')
-#      width = dimensions.get('width','')
-#    display_url = thispost.get('display_url','')
-#    is_video = thispost.get('is_video',False)
-#    tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
-#    accessibility_caption = thispost.get('accessibility_caption','')
-#    caption = ''
-#    if node.get('edge_media_to_caption',''):
-#      captionlist = node['edge_media_to_caption']['edges']
-#      if captionlist:
-#        caption = captionlist[0]
-#    userid = ''
-#    username = ''
-#    owner = node.get('owner',{})
-#    if owner:
-#      userid = owner.get('id','')
-#      username = owner.get('username','')
-#    location = thispost.get('location','')
-#    posts_beyond_first = []
-#    sidecar_to_children_list = []
-#    sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
-#    if sidecar_to_children:
-#      sidecar_to_children_list = sidecar_to_children.get('edge',[])
-#      if sidecar_to_children_list:
-#        for thissubpost in sidecar_to_children_list:
-#          thissubnode = thissubpost.get('node',{})
-#          if thissubnode:
-#            subdisplayurl = thissubnode.get('display_url')
-#            thatpost = {}
-#            thatpost['display_url'] = subdisplayurl
-#            sidecar_to_children_list.append(thatpost)
-#    batch_list.append(display_url)
-    batch_list.append(thispost['display_url'])
+    dimensions = thispost.get('dimensions',{})
+    if dimensions:
+      height = dimensions.get('height','')
+      width = dimensions.get('width','')
+    display_url = thispost.get('display_url','')
+    is_video = thispost.get('is_video',False)
+    tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
+    accessibility_caption = thispost.get('accessibility_caption','')
+    caption = ''
+    if node.get('edge_media_to_caption',''):
+      captionlist = node['edge_media_to_caption']['edges']
+      if captionlist:
+        caption = captionlist[0]
+    userid = ''
+    username = ''
+    owner = node.get('owner',{})
+    if owner:
+      userid = owner.get('id','')
+      username = owner.get('username','')
+    location = thispost.get('location','')
+    posts_beyond_first = []
+    sidecar_to_children_list = []
+    sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
+    if sidecar_to_children:
+      sidecar_to_children_list = sidecar_to_children.get('edge',[])
+      if sidecar_to_children_list:
+        for thissubpost in sidecar_to_children_list:
+          thissubnode = thissubpost.get('node',{})
+          if thissubnode:
+            subdisplayurl = thissubnode.get('display_url')
+            thatpost = {}
+            thatpost['display_url'] = subdisplayurl
+            sidecar_to_children_list.append(thatpost)
+    batch_list.append(display_url)
   return batch_list
 
 def get_user_id_from_response_hash(response_hash):
