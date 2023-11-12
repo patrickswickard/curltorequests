@@ -8,8 +8,8 @@ import instapost
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
-#username = 'bugbobbie'
-username = 'dont_fear_the_millimeter'
+username = 'bugbobbie'
+#username = 'dont_fear_the_millimeter'
 
 secret = mysecret.Mysecret()
 sessionid = secret.sid
@@ -83,6 +83,9 @@ def print_links_from_response_hash(response_hash):
     print(display_url)
 
 def process_post(thispost):
+  print('MYMAINPOSTSTART')
+  print(thispost.keys())
+  print('MYMAINPOSTEND')
   dimensions = thispost.get('dimensions',{})
   if dimensions:
     height = dimensions.get('height','')
@@ -112,6 +115,9 @@ def process_post(thispost):
       for thissubpost in sidecar_to_children_list:
         thissubnode = thissubpost.get('node',{})
         if thissubnode:
+          print('MYSUBPOSTSTART')
+          print(thissubnode.keys())
+          print('MYSUBPOSTEND')
           subdisplayurl = thissubnode.get('display_url')
           thatpost = {}
           thatpost['display_url'] = subdisplayurl
