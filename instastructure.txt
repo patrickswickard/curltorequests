@@ -1,0 +1,21 @@
+On Instagram, you can create posts that have multiple images associated with them.  This creates sort of "subposts" to the main post which all have information associated with them.
+
+So you have a parent post, which in terms of JSON is structured as a hash with the following (main) keys:
+
+dict_keys(['__typename', 'id', 'shortcode', 'dimensions', 'display_url', 'edge_media_to_tagged_user', 'fact_check_overall_rating', 'fact_check_information', 'gating_info', 'sharing_friction_info', 'media_overlay_info', 'media_preview', 'owner', 'is_video', 'has_upcoming_event', 'accessibility_caption', 'edge_media_to_caption', 'edge_media_to_comment', 'comments_disabled', 'taken_at_timestamp', 'edge_liked_by', 'edge_media_preview_like', 'location', 'nft_asset_info', 'thumbnail_src', 'thumbnail_resources', 'coauthor_producers', 'pinned_for_users', 'viewer_can_reshare'])
+
+or
+
+dict_keys(['__typename', 'id', 'shortcode', 'dimensions', 'display_url', 'edge_media_to_tagged_user', 'fact_check_overall_rating', 'fact_check_information', 'gating_info', 'sharing_friction_info', 'media_overlay_info', 'media_preview', 'owner', 'is_video', 'has_upcoming_event', 'accessibility_caption', 'edge_media_to_caption', 'edge_media_to_comment', 'comments_disabled', 'taken_at_timestamp', 'edge_liked_by', 'edge_media_preview_like', 'location', 'nft_asset_info', 'thumbnail_src', 'thumbnail_resources', 'coauthor_producers', 'pinned_for_users', 'viewer_can_reshare', 'edge_sidecar_to_children'])
+
+The first of these has no "subposts" and the second has some.  The subposts are buried in the 'edge_sidecar_to_children' value.
+
+Subposts have the structure typically:
+
+dict_keys(['__typename', 'id', 'shortcode', 'dimensions', 'display_url', 'edge_media_to_tagged_user', 'fact_check_overall_rating', 'fact_check_information', 'gating_info', 'sharing_friction_info', 'media_overlay_info', 'media_preview', 'owner', 'is_video', 'has_upcoming_event', 'accessibility_caption'])
+
+which means they are missing all the "edge" sort of key/value pairs from the main post that are sort of "shared" by all children.
+
+From an immediate standpoint this means that we need to be prepared that these key/value pairs may be missing between singleton posts, posts with children, and child posts when processing them.
+
+Also note that the first "child" will be a repeat of the image from the main post.
