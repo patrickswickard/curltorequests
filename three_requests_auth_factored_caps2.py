@@ -86,25 +86,38 @@ def process_post(thispost):
   print('MYMAINPOSTSTART')
   print(thispost.keys())
   print('MYMAINPOSTEND')
+  post_id = thispost.get('id','')
+  shortcode = thispost.get('shortcode','')
   dimensions = thispost.get('dimensions',{})
+  #subfields
+  height = ''
+  width = ''
   if dimensions:
     height = dimensions.get('height','')
     width = dimensions.get('width','')
   display_url = thispost.get('display_url','')
-  is_video = thispost.get('is_video',False)
   tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
+  fact_check_overall_rating = thispost.get('fact_check_overall_rating','')
+  fact_check_information = thispost.get('fact_check_information','')
+  gating_info = thispost.get('gating_info','')
+  sharing_friction_info = thispost.get('sharing_friction_info','')
+  media_overlay_info = thispost.get('media_overlay_info','')
+  media_preview = thispost.get('media_preview','')
+  owner = thispost.get('owner',{})
+  # subfields
+  userid = ''
+  username = ''
+  if owner:
+    userid = owner.get('id','')
+    username = owner.get('username','')
+  is_video = thispost.get('is_video',False)
+  has_upcoming_event = thispost.get('has_upcoming_event',False)
   accessibility_caption = thispost.get('accessibility_caption','')
   caption = ''
   if thispost.get('edge_media_to_caption',''):
     captionlist = thispost['edge_media_to_caption']['edges']
     if captionlist:
       caption = captionlist[0]
-  userid = ''
-  username = ''
-  owner = thispost.get('owner',{})
-  if owner:
-    userid = owner.get('id','')
-    username = owner.get('username','')
   location = thispost.get('location','')
   posts_beyond_first = []
   sidecar_to_children_list = []
