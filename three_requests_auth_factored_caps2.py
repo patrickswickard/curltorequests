@@ -113,12 +113,14 @@ def process_post(thispost):
   is_video = thispost.get('is_video',False)
   has_upcoming_event = thispost.get('has_upcoming_event',False)
   accessibility_caption = thispost.get('accessibility_caption','')
+  # after this point everything is attached only to the main post
   caption = ''
   if thispost.get('edge_media_to_caption',''):
     captionlist = thispost['edge_media_to_caption']['edges']
     if captionlist:
       caption = captionlist[0]
   location = thispost.get('location','')
+  # after this point these values only exist if we have subposts 
   posts_beyond_first = []
   sidecar_to_children_list = []
   sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
