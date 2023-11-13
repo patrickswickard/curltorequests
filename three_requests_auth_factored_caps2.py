@@ -83,26 +83,39 @@ def print_links_from_response_hash(response_hash):
     print(display_url)
 
 def process_post(thispost):
-  print('MYMAINPOSTSTART')
-  print(thispost.keys())
-  print('MYMAINPOSTEND')
+  #print('MYMAINPOSTSTART')
+  #print(thispost.keys())
+  #print('MYMAINPOSTEND')
+  mypost = instapost.Instapost()
   post_id = thispost.get('id','')
+  mypost.id = post_id
   shortcode = thispost.get('shortcode','')
+  mypost.shortcode = shortcode
   dimensions = thispost.get('dimensions',{})
   #subfields
   height = ''
   width = ''
   if dimensions:
-    height = dimensions.get('height','')
     width = dimensions.get('width','')
+    height = dimensions.get('height','')
+  mypost.width = width
+  mypost.height = height
   display_url = thispost.get('display_url','')
+  mypost.display_url = display_url
   tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
+  mypost.tagged_user_list = tagged_user_list
   fact_check_overall_rating = thispost.get('fact_check_overall_rating','')
+  mypost.fact_check_overall_rating = fact_check_overall_rating
   fact_check_information = thispost.get('fact_check_information','')
+  mypost.fact_check_information = fact_check_information
   gating_info = thispost.get('gating_info','')
+  mypost.gating_info = gating_info
   sharing_friction_info = thispost.get('sharing_friction_info','')
+  mypost.sharing_friction_info = sharing_friction_info
   media_overlay_info = thispost.get('media_overlay_info','')
+  mypost.media_overlay_info = media_overlay_info
   media_preview = thispost.get('media_preview','')
+  mypost.media_preview = media_preview
   owner = thispost.get('owner',{})
   # subfields
   userid = ''
@@ -110,16 +123,23 @@ def process_post(thispost):
   if owner:
     userid = owner.get('id','')
     username = owner.get('username','')
+  mypost.userid = userid
+  mypost.username = username
   is_video = thispost.get('is_video',False)
+  mypost.is_vide = is_video
   has_upcoming_event = thispost.get('has_upcoming_event',False)
+  mypost.has_upcoming_event = has_upcoming_event
   accessibility_caption = thispost.get('accessibility_caption','')
+  mypost.accessibility_caption = accessibility_caption
   # after this point everything is attached only to the main post
   caption = ''
   if thispost.get('edge_media_to_caption',''):
     captionlist = thispost['edge_media_to_caption']['edges']
     if captionlist:
       caption = captionlist[0]
+  mypost.caption = caption
   location = thispost.get('location','')
+  mypost.location = location
   # after this point these values only exist if we have subposts 
   posts_beyond_first = []
   sidecar_to_children_list = []
@@ -130,9 +150,9 @@ def process_post(thispost):
       for thissubpost in sidecar_to_children_list:
         thissubnode = thissubpost.get('node',{})
         if thissubnode:
-          print('MYSUBPOSTSTART')
-          print(thissubnode.keys())
-          print('MYSUBPOSTEND')
+          #print('MYSUBPOSTSTART')
+          #print(thissubnode.keys())
+          #print('MYSUBPOSTEND')
           subdisplayurl = thissubnode.get('display_url')
           thatpost = {}
           thatpost['display_url'] = subdisplayurl
