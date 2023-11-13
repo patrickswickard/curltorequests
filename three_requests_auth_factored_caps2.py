@@ -13,7 +13,6 @@ username = 'bugbobbie'
 
 secret = mysecret.Mysecret()
 sessionid = secret.sid
-print(sessionid)
 
 all_photos_list = []
 
@@ -67,70 +66,60 @@ def get_first_set(username,app_id,sessionid):
   response_hash = json.loads(response.text)
   return response_hash
 
-def print_links_from_response_hash(response_hash):
-  data = response_hash['data']
-  user = data['user']
-  edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
-  page_info = edge_owner_to_timeline_media['page_info']
-  edges = edge_owner_to_timeline_media['edges']
-  has_next_page = page_info['has_next_page']
-  end_cursor = ''
-  if has_next_page:
-    end_cursor = page_info['end_cursor']
-  for thisedge in edges:
-    node = thisedge['node']
-    display_url = node['display_url']
-    print(display_url)
+############################################
 
-def process_post(thispost):
-  #print('MYMAINPOSTSTART')
-  #print(thispost.keys())
-  #print('MYMAINPOSTEND')
-  mypost = instapost.Instapost()
-  post_id = thispost.get('id','')
-  mypost.id = post_id
-  shortcode = thispost.get('shortcode','')
-  mypost.shortcode = shortcode
-  dimensions = thispost.get('dimensions',{})
+def get_common_values(thispost,thisnode):
+  post_id = thisnode.get('id','')
+  thispost.id = post_id
+  shortcode = thisnode.get('shortcode','')
+  thispost.shortcode = shortcode
+  dimensions = thisnode.get('dimensions',{})
   #subfields
   height = ''
   width = ''
   if dimensions:
     width = dimensions.get('width','')
     height = dimensions.get('height','')
-  mypost.width = width
-  mypost.height = height
-  display_url = thispost.get('display_url','')
-  mypost.display_url = display_url
-  tagged_user_list = thispost.get('edge_media_to_tagged_user',[])
-  mypost.tagged_user_list = tagged_user_list
-  fact_check_overall_rating = thispost.get('fact_check_overall_rating','')
-  mypost.fact_check_overall_rating = fact_check_overall_rating
-  fact_check_information = thispost.get('fact_check_information','')
-  mypost.fact_check_information = fact_check_information
-  gating_info = thispost.get('gating_info','')
-  mypost.gating_info = gating_info
-  sharing_friction_info = thispost.get('sharing_friction_info','')
-  mypost.sharing_friction_info = sharing_friction_info
-  media_overlay_info = thispost.get('media_overlay_info','')
-  mypost.media_overlay_info = media_overlay_info
-  media_preview = thispost.get('media_preview','')
-  mypost.media_preview = media_preview
-  owner = thispost.get('owner',{})
+  thispost.width = width
+  thispost.height = height
+  display_url = thisnode.get('display_url','')
+  thispost.display_url = display_url
+  tagged_user_list = thisnode.get('edge_media_to_tagged_user',[])
+  thispost.tagged_user_list = tagged_user_list
+  fact_check_overall_rating = thisnode.get('fact_check_overall_rating','')
+  thispost.fact_check_overall_rating = fact_check_overall_rating
+  fact_check_information = thisnode.get('fact_check_information','')
+  thispost.fact_check_information = fact_check_information
+  gating_info = thisnode.get('gating_info','')
+  thispost.gating_info = gating_info
+  sharing_friction_info = thisnode.get('sharing_friction_info','')
+  thispost.sharing_friction_info = sharing_friction_info
+  media_overlay_info = thisnode.get('media_overlay_info','')
+  thispost.media_overlay_info = media_overlay_info
+  media_preview = thisnode.get('media_preview','')
+  thispost.media_preview = media_preview
+  owner = thisnode.get('owner',{})
   # subfields
   userid = ''
   username = ''
   if owner:
     userid = owner.get('id','')
     username = owner.get('username','')
-  mypost.userid = userid
-  mypost.username = username
-  is_video = thispost.get('is_video',False)
-  mypost.is_vide = is_video
-  has_upcoming_event = thispost.get('has_upcoming_event',False)
-  mypost.has_upcoming_event = has_upcoming_event
-  accessibility_caption = thispost.get('accessibility_caption','')
-  mypost.accessibility_caption = accessibility_caption
+  thispost.userid = userid
+  thispost.username = username
+  is_video = thisnode.get('is_video',False)
+  thispost.is_vide = is_video
+  has_upcoming_event = thisnode.get('has_upcoming_event',False)
+  thispost.has_upcoming_event = has_upcoming_event
+  accessibility_caption = thisnode.get('accessibility_caption','')
+  thispost.accessibility_caption = accessibility_caption
+
+
+############################################
+
+def process_post(thispost):
+  mypost = instapost.Instapost()
+  get_common_values(mypost,thispost)
   # after this point everything is attached only to the main post
   caption = ''
   if thispost.get('edge_media_to_caption',''):
@@ -145,77 +134,19 @@ def process_post(thispost):
   sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
   if sidecar_to_children:
     sidecar_to_children_list = sidecar_to_children.get('edges',[])
-#    print('DANGER!!!!!!!!!!!')
-#    print(sidecar_to_children_list)
-#    print('EXCITEMENT!!!!!!!!!!!')
     if sidecar_to_children_list:
       for thissubpost in sidecar_to_children_list:
-#        print('DANGER!!!!!!!!!!!')
-#        print(thissubpost)
-#        print('EXCITEMENT!!!!!!!!!!!')
         thissubnode = thissubpost.get('node',{})
         if thissubnode:
-          #print('MYSUBPOSTSTART')
-          #print(thissubnode.keys())
-          #print('MYSUBPOSTEND')
           # create new post object
           mysubpost = instapost.Instapost()
           # grab the stuff only attached to main
           mysubpost.caption = caption
           mysubpost.location = location
-          # lazily ripped from above except with subpost, refactor this
-          #############################
-          post_id = thissubnode.get('id','')
-          mysubpost.id = post_id
-          shortcode = thissubnode.get('shortcode','')
-          mysubpost.shortcode = shortcode
-          dimensions = thissubnode.get('dimensions',{})
-          #subfields
-          height = ''
-          width = ''
-          if dimensions:
-            width = dimensions.get('width','')
-            height = dimensions.get('height','')
-          mysubpost.width = width
-          mysubpost.height = height
-          display_url = thissubnode.get('display_url','')
-          mysubpost.display_url = display_url
-          tagged_user_list = thissubnode.get('edge_media_to_tagged_user',[])
-          mysubpost.tagged_user_list = tagged_user_list
-          fact_check_overall_rating = thissubnode.get('fact_check_overall_rating','')
-          mysubpost.fact_check_overall_rating = fact_check_overall_rating
-          fact_check_information = thissubnode.get('fact_check_information','')
-          mysubpost.fact_check_information = fact_check_information
-          gating_info = thissubnode.get('gating_info','')
-          mysubpost.gating_info = gating_info
-          sharing_friction_info = thissubnode.get('sharing_friction_info','')
-          mysubpost.sharing_friction_info = sharing_friction_info
-          media_overlay_info = thissubnode.get('media_overlay_info','')
-          mysubpost.media_overlay_info = media_overlay_info
-          media_preview = thissubnode.get('media_preview','')
-          mysubpost.media_preview = media_preview
-          owner = thissubnode.get('owner',{})
-          # subfields
-          userid = ''
-          username = ''
-          if owner:
-            userid = owner.get('id','')
-            username = owner.get('username','')
-          mysubpost.userid = userid
-          mysubpost.username = username
-          is_video = thissubnode.get('is_video',False)
-          mysubpost.is_vide = is_video
-          has_upcoming_event = thissubnode.get('has_upcoming_event',False)
-          mysubpost.has_upcoming_event = has_upcoming_event
-          accessibility_caption = thissubnode.get('accessibility_caption','')
-          mysubpost.accessibility_caption = accessibility_caption
-          #############################
-          #subdisplayurl = thissubnode.get('display_url')
-          #thatpost = {}
-          #thatpost['display_url'] = subdisplayurl
+          get_common_values(mysubpost,thissubnode)
           my_sidecar_to_children_list.append(mysubpost)
   mypost.sidecar_to_children_list = my_sidecar_to_children_list
-  return thispost
+  return mypost
 
 def list_links_from_response_hash(response_hash):
   batch_list = []
@@ -234,7 +165,12 @@ def list_links_from_response_hash(response_hash):
     # thispost will be a hash
     post_object = process_post(thispost)
     thispost = post_object
-    batch_list.append(thispost['display_url'])
+    #batch_list.append(thispost['display_url'])
+    if post_object.sidecar_to_children_list:
+      for my_post_object in post_object.sidecar_to_children_list:
+        batch_list.append(my_post_object.display_url)
+    else:
+      batch_list.append(post_object.display_url)
   return batch_list
 
 def get_user_id_from_response_hash(response_hash):
@@ -268,7 +204,6 @@ def get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid):
 
 app_id = get_app_id(username)
 response_hash = get_first_set(username,app_id,sessionid)
-print_links_from_response_hash(response_hash)
 this_list = list_links_from_response_hash(response_hash)
 all_photos_list = all_photos_list + this_list
 
@@ -280,16 +215,13 @@ num = '50'
 
 while end_cursor:
   next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid)
-  print_links_from_response_hash(next_response_hash)
   this_list = list_links_from_response_hash(next_response_hash)
   all_photos_list = all_photos_list + this_list
   doc_id = '17991233890457762'
   user_id = user_id
   end_cursor = get_end_cursor_from_response_hash(next_response_hash)
   num = '50'
-  print('!!!!!!!!!!!!!!!')
 
-print('GROOGROOGROOGROOGROOGROOGROO')
 print(json.dumps(all_photos_list))
 outfilename = 'all_photos_list3.json'
 thisoutfile = open(outfilename, 'w')
