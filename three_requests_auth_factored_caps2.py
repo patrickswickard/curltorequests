@@ -14,8 +14,6 @@ username = 'bugbobbie'
 secret = mysecret.Mysecret()
 sessionid = secret.sid
 
-all_photos_list = []
-
 # method to download a single photo, takes url as source and dl target as filename
 def download_single_photo(source,filename):
   source = source
@@ -24,12 +22,13 @@ def download_single_photo(source,filename):
   with open(photo_filename, 'wb') as out_file:
     shutil.copyfileobj(url_response.raw, out_file)
 
+# method to get app id parameter which is probably static but maybe not?
+# in any case it is parsable at least for now
+# if this breaks try hard-coding it
 def get_app_id(username):
   debug = False
   request_url = 'https://www.instagram.com/' + username + '/'
-
   headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'}
-
   if not debug:
     proxies = {}
   else:
@@ -105,7 +104,7 @@ def get_end_cursor_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   return end_cursor
 
-def get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid):
+def get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid):
   if end_cursor:
     request_url = 'https://www.instagram.com/graphql/query/?doc_id=' + doc_id + '&variables=%7B%22id%22%3A%22' + user_id + '%22%2C%22after%22%3A%22' + end_cursor + '%22%2C%22first%22%3A' + num + '%7D'
     header_hash = {
@@ -117,25 +116,32 @@ def get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid):
     response_hash = json.loads(response.text)
     return response_hash
 
-app_id = get_app_id(username)
-response_hash = get_first_set(username,app_id,sessionid)
-this_list = list_links_from_response_hash(response_hash)
-all_photos_list = all_photos_list + this_list
-
-# hard-coded, hopefully always the same
-doc_id = '17991233890457762'
-user_id = get_user_id_from_response_hash(response_hash)
-end_cursor = get_end_cursor_from_response_hash(response_hash)
-num = '50'
-
-while end_cursor:
-  next_response_hash = get_next_response_hash(doc_id,user_id,end_cursor,num,sessionid)
-  this_list = list_links_from_response_hash(next_response_hash)
+def get_all_photos_list(username, sessionid):
+  all_photos_list = []
+  app_id = get_app_id(username)
+  response_hash = get_first_set(username,app_id,sessionid)
+  this_list = list_links_from_response_hash(response_hash)
   all_photos_list = all_photos_list + this_list
+
+  # hard-coded, hopefully always the same
   doc_id = '17991233890457762'
-  user_id = user_id
-  end_cursor = get_end_cursor_from_response_hash(next_response_hash)
+  user_id = get_user_id_from_response_hash(response_hash)
+  end_cursor = get_end_cursor_from_response_hash(response_hash)
   num = '50'
+
+  while end_cursor:
+    next_response_hash = get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid)
+    this_list = list_links_from_response_hash(next_response_hash)
+    all_photos_list = all_photos_list + this_list
+    doc_id = '17991233890457762'
+    user_id = user_id
+    end_cursor = get_end_cursor_from_response_hash(next_response_hash)
+    num = '50'
+  return all_photos_list
+
+#################################################################
+
+all_photos_list = get_all_photos_list(username, sessionid)
 
 print(json.dumps(all_photos_list))
 outfilename = 'all_photos_list3.json'

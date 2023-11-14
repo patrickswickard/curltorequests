@@ -82,3 +82,30 @@ class Instapost:
             mysubpost.get_common_values(thissubnode)
             my_sidecar_to_children_list.append(mysubpost)
     self.sidecar_to_children_list = my_sidecar_to_children_list
+
+  # this really does not belong under posts but okay for now until we get maybe broader
+  def get_app_id(username):
+    debug = False
+    request_url = 'https://www.instagram.com/' + username + '/'
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'}
+    if not debug:
+      proxies = {}
+    else:
+      proxies = {
+        'http' : 'http://localhost:8888',
+        'https' : 'http://localhost:8888',
+      }
+    response = requests.get(request_url, headers=headers, proxies=proxies, verify=False)
+    raw_html = response.text
+    responselines = response.text.splitlines()
+    for thisline in responselines:
+      hit = re.search(r"APP_ID",thisline)
+      if hit:
+        jsonthisline = re.findall(r"<script[^>]*>\s*(.*?)\s*</script>",thisline)
+        if jsonthisline:
+          jsontext = jsonthisline[0]
+          # this json is so disorganized it's not even worth parsing
+          #thishash = json.loads(jsontext)
+          app_id_hits = re.findall(r"\"APP_ID\":\"(.*?)\"",jsontext)
+          app_id = app_id_hits[0]
+          return app_id
