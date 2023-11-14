@@ -106,7 +106,8 @@ def get_common_values(thispost,thisnode):
 
 def process_post(thispost):
   mypost = instapost.Instapost()
-  get_common_values(mypost,thispost)
+  #get_common_values(mypost,thispost)
+  mypost.get_common_values(thispost)
   # after this point everything is attached only to the main post
   caption = ''
   if thispost.get('edge_media_to_caption',''):
