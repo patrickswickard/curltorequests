@@ -66,44 +66,6 @@ def get_first_set(username,app_id,sessionid):
   response_hash = json.loads(response.text)
   return response_hash
 
-############################################
-
-def get_common_values(thispost,thisnode):
-  thispost.id = thisnode.get('id','')
-  thispost.shortcode = thisnode.get('shortcode','')
-  #subfields
-  height = ''
-  width = ''
-  dimensions = thisnode.get('dimensions',{})
-  if dimensions:
-    width = dimensions.get('width','')
-    height = dimensions.get('height','')
-  thispost.width = width
-  thispost.height = height
-  thispost.display_url = thisnode.get('display_url','')
-  thispost.tagged_user_list = thisnode.get('edge_media_to_tagged_user',[])
-  thispost.fact_check_overall_rating = thisnode.get('fact_check_overall_rating','')
-  thispost.fact_check_information = thisnode.get('fact_check_information','')
-  thispost.gating_info = thisnode.get('gating_info','')
-  thispost.sharing_friction_info = thisnode.get('sharing_friction_info','')
-  thispost.media_overlay_info = thisnode.get('media_overlay_info','')
-  thispost.media_preview = thisnode.get('media_preview','')
-  # subfields
-  userid = ''
-  username = ''
-  owner = thisnode.get('owner',{})
-  if owner:
-    userid = owner.get('id','')
-    username = owner.get('username','')
-  thispost.userid = userid
-  thispost.username = username
-  thispost.is_video = thisnode.get('is_video',False)
-  thispost.has_upcoming_event = thisnode.get('has_upcoming_event',False)
-  thispost.accessibility_caption = thisnode.get('accessibility_caption','')
-
-
-############################################
-
 def process_post(thispost):
   mypost = instapost.Instapost()
   #get_common_values(mypost,thispost)
@@ -131,7 +93,8 @@ def process_post(thispost):
           # grab the stuff only attached to main
           mysubpost.caption = caption
           mysubpost.location = location
-          get_common_values(mysubpost,thissubnode)
+          #get_common_values(mysubpost,thissubnode)
+          mysubpost.get_common_values(thissubnode)
           my_sidecar_to_children_list.append(mysubpost)
   mypost.sidecar_to_children_list = my_sidecar_to_children_list
   return mypost
