@@ -66,39 +66,6 @@ def get_first_set(username,app_id,sessionid):
   response_hash = json.loads(response.text)
   return response_hash
 
-def process_post(thispost):
-  mypost = instapost.Instapost()
-  #get_common_values(mypost,thispost)
-  mypost.get_common_values(thispost)
-  # after this point everything is attached only to the main post
-  caption = ''
-  if thispost.get('edge_media_to_caption',''):
-    captionlist = thispost['edge_media_to_caption']['edges']
-    if captionlist:
-      caption = captionlist[0]
-  mypost.caption = caption
-  location = thispost.get('location','')
-  mypost.location = location
-  # after this point these values only exist if we have subposts 
-  my_sidecar_to_children_list = []
-  sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
-  if sidecar_to_children:
-    sidecar_to_children_list = sidecar_to_children.get('edges',[])
-    if sidecar_to_children_list:
-      for thissubpost in sidecar_to_children_list:
-        thissubnode = thissubpost.get('node',{})
-        if thissubnode:
-          # create new post object
-          mysubpost = instapost.Instapost()
-          # grab the stuff only attached to main
-          mysubpost.caption = caption
-          mysubpost.location = location
-          #get_common_values(mysubpost,thissubnode)
-          mysubpost.get_common_values(thissubnode)
-          my_sidecar_to_children_list.append(mysubpost)
-  mypost.sidecar_to_children_list = my_sidecar_to_children_list
-  return mypost
-
 def list_links_from_response_hash(response_hash):
   batch_list = []
   data = response_hash['data']
@@ -112,11 +79,8 @@ def list_links_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
     node = thisedge['node']
-    thispost = node
-    # thispost will be a hash
-    post_object = process_post(thispost)
-    thispost = post_object
-    #batch_list.append(thispost['display_url'])
+    post_object = instapost.Instapost()
+    post_object.process_post(node)
     if post_object.sidecar_to_children_list:
       for my_post_object in post_object.sidecar_to_children_list:
         batch_list.append(my_post_object.display_url)

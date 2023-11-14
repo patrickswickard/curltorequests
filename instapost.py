@@ -2,9 +2,6 @@ class Instapost:
   def __init__(self):
     self.id = ''
     self.shortcode = ''
-    #self.dimensions = {}
-    #self.dimensions['width'] = 0
-    #self.dimensions['height'] = 0
     self.width = 0
     self.height = 0
     self.display_url = ''
@@ -15,7 +12,6 @@ class Instapost:
     self.sharing_friction_info = ''
     self.media_overlay_info = ''
     self.media_preview = ''
-    #self.owner = '' self.userid = ''
     self.userid = ''
     self.username = ''
     self.is_video = False
@@ -29,7 +25,7 @@ class Instapost:
   def get_common_values(self,thisnode):
     self.id = thisnode.get('id','')
     self.shortcode = thisnode.get('shortcode','')
-  #subfields
+    #subfields
     height = ''
     width = ''
     dimensions = thisnode.get('dimensions',{})
@@ -58,3 +54,31 @@ class Instapost:
     self.is_video = thisnode.get('is_video',False)
     self.has_upcoming_event = thisnode.get('has_upcoming_event',False)
     self.accessibility_caption = thisnode.get('accessibility_caption','')
+
+  def process_post(self,thispost):
+    self.get_common_values(thispost)
+    # after this point everything is attached only to the main post
+    caption = ''
+    if thispost.get('edge_media_to_caption',''):
+      captionlist = thispost['edge_media_to_caption']['edges']
+      if captionlist:
+        caption = captionlist[0]
+    self.caption = caption
+    self.location = thispost.get('location','')
+    # after this point these values only exist if we have subposts 
+    my_sidecar_to_children_list = []
+    sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
+    if sidecar_to_children:
+      sidecar_to_children_list = sidecar_to_children.get('edges',[])
+      if sidecar_to_children_list:
+        for thissubpost in sidecar_to_children_list:
+          thissubnode = thissubpost.get('node',{})
+          if thissubnode:
+            # create new post object
+            mysubpost = Instapost()
+            # grab the stuff only attached to main
+            mysubpost.caption = self.caption
+            mysubpost.location = self.location
+            mysubpost.get_common_values(thissubnode)
+            my_sidecar_to_children_list.append(mysubpost)
+    self.sidecar_to_children_list = my_sidecar_to_children_list
