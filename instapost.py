@@ -55,24 +55,24 @@ class Instapost:
     self.has_upcoming_event = thisnode.get('has_upcoming_event',False)
     self.accessibility_caption = thisnode.get('accessibility_caption','')
 
-  def process_post(self,thispost):
-    self.get_common_values(thispost)
+  def process_post(self,thisnode):
+    self.get_common_values(thisnode)
     # after this point everything is attached only to the main post
     caption = ''
-    if thispost.get('edge_media_to_caption',''):
-      captionlist = thispost['edge_media_to_caption']['edges']
+    if thisnode.get('edge_media_to_caption',''):
+      captionlist = thisnode['edge_media_to_caption']['edges']
       if captionlist:
         caption = captionlist[0]
     self.caption = caption
-    self.location = thispost.get('location','')
+    self.location = thisnode.get('location','')
     # after this point these values only exist if we have subposts 
     my_sidecar_to_children_list = []
-    sidecar_to_children = thispost.get('edge_sidecar_to_children',{})
+    sidecar_to_children = thisnode.get('edge_sidecar_to_children',{})
     if sidecar_to_children:
       sidecar_to_children_list = sidecar_to_children.get('edges',[])
       if sidecar_to_children_list:
-        for thissubpost in sidecar_to_children_list:
-          thissubnode = thissubpost.get('node',{})
+        for childthing in sidecar_to_children_list:
+          thissubnode = childthing.get('node',{})
           if thissubnode:
             # create new post object
             mysubpost = Instapost()
