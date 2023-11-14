@@ -69,50 +69,37 @@ def get_first_set(username,app_id,sessionid):
 ############################################
 
 def get_common_values(thispost,thisnode):
-  post_id = thisnode.get('id','')
-  thispost.id = post_id
-  shortcode = thisnode.get('shortcode','')
-  thispost.shortcode = shortcode
-  dimensions = thisnode.get('dimensions',{})
+  thispost.id = thisnode.get('id','')
+  thispost.shortcode = thisnode.get('shortcode','')
   #subfields
   height = ''
   width = ''
+  dimensions = thisnode.get('dimensions',{})
   if dimensions:
     width = dimensions.get('width','')
     height = dimensions.get('height','')
   thispost.width = width
   thispost.height = height
-  display_url = thisnode.get('display_url','')
-  thispost.display_url = display_url
-  tagged_user_list = thisnode.get('edge_media_to_tagged_user',[])
-  thispost.tagged_user_list = tagged_user_list
-  fact_check_overall_rating = thisnode.get('fact_check_overall_rating','')
-  thispost.fact_check_overall_rating = fact_check_overall_rating
-  fact_check_information = thisnode.get('fact_check_information','')
-  thispost.fact_check_information = fact_check_information
-  gating_info = thisnode.get('gating_info','')
-  thispost.gating_info = gating_info
-  sharing_friction_info = thisnode.get('sharing_friction_info','')
-  thispost.sharing_friction_info = sharing_friction_info
-  media_overlay_info = thisnode.get('media_overlay_info','')
-  thispost.media_overlay_info = media_overlay_info
-  media_preview = thisnode.get('media_preview','')
-  thispost.media_preview = media_preview
-  owner = thisnode.get('owner',{})
+  thispost.display_url = thisnode.get('display_url','')
+  thispost.tagged_user_list = thisnode.get('edge_media_to_tagged_user',[])
+  thispost.fact_check_overall_rating = thisnode.get('fact_check_overall_rating','')
+  thispost.fact_check_information = thisnode.get('fact_check_information','')
+  thispost.gating_info = thisnode.get('gating_info','')
+  thispost.sharing_friction_info = thisnode.get('sharing_friction_info','')
+  thispost.media_overlay_info = thisnode.get('media_overlay_info','')
+  thispost.media_preview = thisnode.get('media_preview','')
   # subfields
   userid = ''
   username = ''
+  owner = thisnode.get('owner',{})
   if owner:
     userid = owner.get('id','')
     username = owner.get('username','')
   thispost.userid = userid
   thispost.username = username
-  is_video = thisnode.get('is_video',False)
-  thispost.is_vide = is_video
-  has_upcoming_event = thisnode.get('has_upcoming_event',False)
-  thispost.has_upcoming_event = has_upcoming_event
-  accessibility_caption = thisnode.get('accessibility_caption','')
-  thispost.accessibility_caption = accessibility_caption
+  thispost.is_video = thisnode.get('is_video',False)
+  thispost.has_upcoming_event = thisnode.get('has_upcoming_event',False)
+  thispost.accessibility_caption = thisnode.get('accessibility_caption','')
 
 
 ############################################
