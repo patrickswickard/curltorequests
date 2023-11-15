@@ -116,6 +116,8 @@ def get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid):
     response_hash = json.loads(response.text)
     return response_hash
 
+# this method is great but really want a method that gets all post info and returns that
+# then another method that can maybe take that and spit out all photos
 def get_all_photos_list(username, sessionid):
   all_photos_list = []
   app_id = get_app_id(username)
