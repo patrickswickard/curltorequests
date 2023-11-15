@@ -19,6 +19,8 @@ class Instapost:
     self.accessibility_caption = ''
     self.tagged_user_list = []
     self.caption = ''
+##############################################################################
+##############################################################################
     self.location = ''
     self.sidecar_to_children_list = []
 
@@ -64,6 +66,8 @@ class Instapost:
       if captionlist:
         caption = captionlist[0]
     self.caption = caption
+##############################################################################
+##############################################################################
     self.location = thisnode.get('location','')
     # after this point these values only exist if we have subposts 
     my_sidecar_to_children_list = []
