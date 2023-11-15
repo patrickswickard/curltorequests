@@ -63,6 +63,9 @@ def get_first_set(username,app_id,sessionid):
   headers = header_hash
   response = requests.get(request_url, headers=headers)
   response_hash = json.loads(response.text)
+#  outfilename = 'FIRSTSET.json'
+#  thisoutfile = open(outfilename, 'w')
+#  thisoutfile.write(response.text)
   return response_hash
 
 def list_links_from_response_hash(response_hash):
@@ -114,6 +117,9 @@ def get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid):
     headers = header_hash
     response = requests.get(request_url, headers=headers)
     response_hash = json.loads(response.text)
+    outfilename = 'NEXTSET.json'
+    thisoutfile = open(outfilename, 'w')
+    thisoutfile.write(response.text)
     return response_hash
 
 # this method is great but really want a method that gets all post info and returns that

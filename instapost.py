@@ -20,6 +20,10 @@ class Instapost:
     self.tagged_user_list = []
     self.caption = ''
 ##############################################################################
+    self.number_of_comments = ''
+    self.comments_disabled = False
+    self.timestamp = 0
+    self.number_of_likes = ''
 ##############################################################################
     self.location = ''
     self.sidecar_to_children_list = []
@@ -67,6 +71,19 @@ class Instapost:
         caption = captionlist[0]
     self.caption = caption
 ##############################################################################
+    number_of_comments = 0
+    if thisnode.get('edge_media_to_comment',{}):
+      if thisnode['edge_media_to_comment'].get('count',0):
+        number_of_comments = thisnode['edge_media_to_comment']['count']
+    self.number_of_comments = number_of_comments
+    self.comments_disabled = thisnode.get('comments_disabled', False)
+    self.timestamp = thisnode.get('taken_at_timestamp',0)
+    print(self.timestamp)
+    number_of_likes = ''
+    if thisnode.get('edge_media_preview_like',{}):
+      if thisnode['edge_media_preview_like'].get('count',0):
+        number_of_likes = thisnode['edge_media_preview_like']['count']
+    self.number_of_likes = number_of_likes
 ##############################################################################
     self.location = thisnode.get('location','')
     # after this point these values only exist if we have subposts 
