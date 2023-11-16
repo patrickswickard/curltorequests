@@ -80,7 +80,6 @@ class Instapost:
     self.number_of_comments = number_of_comments
     self.comments_disabled = thisnode.get('comments_disabled', False)
     self.timestamp = thisnode.get('taken_at_timestamp',0)
-    print(self.timestamp)
     number_of_likes = ''
     if thisnode.get('edge_media_preview_like',{}):
       if thisnode['edge_media_preview_like'].get('count',0):
@@ -171,3 +170,43 @@ class Instapost:
   def dumps(self):
     thishash = self.dumph()
     return json.dumps(thishash)
+
+  def reads(self,json):
+    thishash = json.reads(json)
+    postobject = self.Instapost()
+    return postobject
+
+  def readh(self,posthash):
+    self.id = posthash['id']
+    self.shortcode = posthash['shortcode']
+    self.width = posthash['width']
+    self.height = posthash['height']
+    self.display_url = posthash['display_url']
+    self.tagged_user_list = posthash['tagged_user_list']
+    self.fact_check_overall_rating = posthash['fact_check_overall_rating']
+    self.fact_check_information = posthash['fact_check_information']
+    self.gating_info = posthash['gating_info']
+    self.sharing_friction_info =  posthash['sharing_friction_info']
+    self.media_overlay_info = posthash['media_overlay_info']
+    self.media_preview = posthash['media_preview']
+    self.userid = posthash['userid']
+    self.username = posthash['username']
+    self.is_video = posthash['is_video']
+    self.has_upcoming_event = posthash['has_upcoming_event']
+    self.accessibility_caption = posthash['accessibility_caption']
+    self.tagged_user_list = posthash['tagged_user_list']
+    self.caption = posthash['caption']
+##############################################################################
+    self.number_of_comments = posthash['number_of_comments']
+    self.comments_disabled = posthash['comments_disabled']
+    self.timestamp = posthash['timestamp']
+    self.number_of_likes = posthash['number_of_likes']
+##############################################################################
+    self.location = posthash['location']
+    sidecar_to_children_list_posts = []
+    for this_child in posthash['sidecar_to_children_list']:
+      thispost = this_child.readh()
+      sidecar_to_children_list_posts.append(thispost)
+    self.sidecar_to_children_list = posthash['sidecar_to_children_list']
+    return posthash
+
