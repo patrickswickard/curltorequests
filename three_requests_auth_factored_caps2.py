@@ -211,4 +211,6 @@ thisoutfile = open(outfilename, 'w')
 thisoutfile.write(json.dumps(all_data_list))
 
 for entry in all_data_list:
+  print('******************************************************')
+  print('******************************************************')
   print(entry['display_url'])
