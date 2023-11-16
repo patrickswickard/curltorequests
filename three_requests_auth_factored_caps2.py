@@ -90,6 +90,32 @@ def list_links_from_response_hash(response_hash):
       batch_list.append(post_object.display_url)
   return batch_list
 
+def list_data_from_response_hash(response_hash):
+  batch_list = []
+  data = response_hash['data']
+  user = data['user']
+  edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
+  page_info = edge_owner_to_timeline_media['page_info']
+  edges = edge_owner_to_timeline_media['edges']
+  has_next_page = page_info['has_next_page']
+  end_cursor = ''
+  if has_next_page:
+    end_cursor = page_info['end_cursor']
+  for thisedge in edges:
+    node = thisedge['node']
+    post_object = instapost.Instapost()
+    post_object.process_post(node)
+    if post_object.sidecar_to_children_list:
+      for my_post_object in post_object.sidecar_to_children_list:
+        #batch_list.append(my_post_object.display_url)
+        batch_list.append(my_post_object.dumph())
+        #batch_list.append(my_post_object.dumph(self))
+    else:
+      #batch_list.append(post_object.display_url)
+      batch_list.append(post_object.dumph())
+      #batch_list.append(post_object.type())
+  return batch_list
+
 def get_user_id_from_response_hash(response_hash):
   data = response_hash['data']
   user = data['user']
@@ -149,9 +175,40 @@ def get_all_photos_list(username, sessionid):
 
 #################################################################
 
-all_photos_list = get_all_photos_list(username, sessionid)
+# this method is great but really want a method that gets all post info and returns that
+# then another method that can maybe take that and spit out all photos
+def get_all_data_list(username, sessionid):
+  all_data_list = []
+  app_id = get_app_id(username)
+  response_hash = get_first_set(username,app_id,sessionid)
+  this_list = list_data_from_response_hash(response_hash)
+  all_data_list = all_data_list + this_list
 
-print(json.dumps(all_photos_list))
-outfilename = 'all_photos_list3.json'
+  # hard-coded, hopefully always the same
+  doc_id = '17991233890457762'
+  user_id = get_user_id_from_response_hash(response_hash)
+  end_cursor = get_end_cursor_from_response_hash(response_hash)
+  num = '50'
+
+  while end_cursor:
+    next_response_hash = get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid)
+    this_list = list_data_from_response_hash(next_response_hash)
+    all_data_list = all_data_list + this_list
+    doc_id = '17991233890457762'
+    user_id = user_id
+    end_cursor = get_end_cursor_from_response_hash(next_response_hash)
+    num = '50'
+  return all_data_list
+
+#all_photos_list = get_all_photos_list(username, sessionid)
+all_data_list = get_all_data_list(username, sessionid)
+
+#print(json.dumps(all_photos_list))
+print(json.dumps(all_data_list))
+outfilename = 'all_data_list.json'
 thisoutfile = open(outfilename, 'w')
-thisoutfile.write(json.dumps(all_photos_list))
+#thisoutfile.write(json.dumps(all_photos_list))
+thisoutfile.write(json.dumps(all_data_list))
+
+for entry in all_data_list:
+  print(entry['display_url'])

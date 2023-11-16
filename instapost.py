@@ -1,3 +1,5 @@
+import json
+
 class Instapost:
   def __init__(self):
     self.id = ''
@@ -130,3 +132,42 @@ class Instapost:
           app_id_hits = re.findall(r"\"APP_ID\":\"(.*?)\"",jsontext)
           app_id = app_id_hits[0]
           return app_id
+
+  def dumph(self):
+    posthash = {}
+    posthash['id'] = self.id
+    posthash['shortcode'] = self.shortcode
+    posthash['width'] = self.width
+    posthash['height'] = self.height
+    posthash['display_url'] = self.display_url
+    posthash['tagged_user_list'] = self.tagged_user_list
+    posthash['fact_check_overall_rating'] = self.fact_check_overall_rating
+    posthash['fact_check_information'] = self.fact_check_information
+    posthash['gating_info'] = self.gating_info
+    posthash['sharing_friction_info'] = self.sharing_friction_info
+    posthash['media_overlay_info'] = self.media_overlay_info
+    posthash['media_preview'] = self.media_preview
+    posthash['userid'] = self.userid
+    posthash['username'] = self.username
+    posthash['is_video'] = self.is_video
+    posthash['has_upcoming_event'] = self.has_upcoming_event
+    posthash['accessibility_caption'] = self.accessibility_caption
+    posthash['tagged_user_list'] = self.tagged_user_list
+    posthash['caption'] = self.caption
+##############################################################################
+    posthash['number_of_comments'] = self.number_of_comments
+    posthash['comments_disabled'] = self.comments_disabled
+    posthash['timestamp'] = self.timestamp
+    posthash['number_of_likes'] = self.number_of_likes
+##############################################################################
+    posthash['location'] = self.location
+    sidecar_to_children_list_data = []
+    for this_child in self.sidecar_to_children_list:
+      thishash = this_child.dumph()
+      sidecar_to_children_list_data.append(thishash)
+    posthash['sidecar_to_children_list'] = sidecar_to_children_list_data
+    return posthash
+
+  def dumps(self):
+    thishash = self.dumph()
+    return json.dumps(thishash)
