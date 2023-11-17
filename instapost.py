@@ -1,4 +1,6 @@
 import json
+import requests
+import re
 
 class Instauser:
   def __init__(self):
@@ -17,7 +19,7 @@ class Instauser:
     self.followed_by_viewer = False
     self.follow_count = 0
     self.follows_viewer = False
-    self.full_name = False
+    self.full_name = ''
     self.group_metadata = ''
     self.has_ar_effects = False
     self.has_clips = False
@@ -197,6 +199,115 @@ class Instauser:
     self.connected_fb_page = thishash['connected_fb_page']
     self.pronouns = thishash['pronouns']
 
+  # method to get app id parameter which is probably static but maybe not?
+  # in any case it is parsable at least for now
+  # if this breaks try hard-coding it
+  def get_app_id(username):
+    debug = False
+    request_url = 'https://www.instagram.com/' + username + '/'
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'}
+    if not debug:
+      proxies = {}
+    else:
+      proxies = {
+        'http' : 'http://localhost:8888',
+        'https' : 'http://localhost:8888',
+      }
+    response = requests.get(request_url, headers=headers, proxies=proxies, verify=False)
+    raw_html = response.text
+    responselines = response.text.splitlines()
+    for thisline in responselines:
+      hit = re.search(r"APP_ID",thisline)
+      if hit:
+        jsonthisline = re.findall(r"<script[^>]*>\s*(.*?)\s*</script>",thisline)
+        if jsonthisline:
+          jsontext = jsonthisline[0]
+          # this json is so disorganized it's not even worth parsing
+          #thishash = json.loads(jsontext)
+          app_id_hits = re.findall(r"\"APP_ID\":\"(.*?)\"",jsontext)
+          app_id = app_id_hits[0]
+          return app_id
+
+  def get_first_set(username,app_id,sessionid):
+    request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + username
+    header_hash = {
+    }
+    # this is probably hard-coded but we parse it anyway
+    # if/when this breaks try the hard-coded version
+    #header_hash['x-ig-app-id'] = '936619743392459'
+    header_hash['Cookie'] = 'sessionid=' + sessionid + '; ds_user_id=CAFE'
+    header_hash['x-ig-app-id'] = app_id
+    headers = header_hash
+    response = requests.get(request_url, headers=headers)
+    response_hash = json.loads(response.text)
+    return response_hash
+
+  def get_user_from_response_hash(self,response_hash):
+    data = response_hash.get('data')
+    if data:
+      thisuser = data.get('user')
+      if thisuser:
+        self.ai_agent_type = thisuser.get('ai_agent_type','')
+        self.biography = thisuser.get('biography','')
+        self.bio_links = thisuser.get('bio_links',[])
+        self.fb_profile_biolink = thisuser.get('fb_profile_biolink','')
+        self.blocked_by_viewer = thisuser.get('blocked_by_viewer',False)
+        self.restricted_by_viewer = thisuser.get('restricted_by_viewer',False)
+        self.country_block = thisuser.get('country_block',False)
+        self.eimu_id = thisuser.get('eimu_id','')
+        self.external_url = thisuser.get('external_url','')
+        self.external_url_linkshimmed = thisuser.get('external_url_linkshimmed','')
+        self.followed_by_count = thisuser.get('followed_by_count',0)
+        self.fbid = thisuser.get('fbid',0)
+        self.followed_by_viewer = thisuser.get('followed_by_viewer',False)
+        self.follow_count = thisuser.get('follow_count',0)
+        self.follows_viewer = thisuser.get('follows_viewer',False)
+        self.full_name = thisuser.get('full_name','')
+        self.group_metadata = thisuser.get('group_metadata','')
+        self.has_ar_effects = thisuser.get('has_ar_effects',False)
+        self.has_clips = thisuser.get('has_clips',False)
+        self.has_guides = thisuser.get('has_guides',False)
+        self.has_channel = thisuser.get('has_channel',False)
+        self.has_blocked_viewer = thisuser.get('has_blocked_viewer',False)
+        self.highlight_reel_count = thisuser.get('highlight_reel_count',0)
+        self.has_requested_viewer = thisuser.get('has_requested_viewer',False)
+        self.hide_like_and_view_count = thisuser.get('hide_like_and_view_count',False)
+        self.id = thisuser.get('id','')
+        self.is_business_account = thisuser.get('is_business_account',False)
+        self.is_professional_account = thisuser.get('is_professional_account',False)
+        self.is_supervision_enabled = thisuser.get('is_supervision_enabled',False)
+        self.is_guardian_of_viewer = thisuser.get('is_guardian_of_viewer',False)
+        self.is_supervised_by_viewer = thisuser.get('is_supervised_by_viewer',False)
+        self.is_supervised_user = thisuser.get('is_supervised_user',False)
+        self.is_embed_disabled = thisuser.get('is_embed_disabled',False)
+        self.is_joined_recently = thisuser.get('is_joined_recently',False)
+        self.guardian_id = thisuser.get('guardian_id','')
+        self.business_address_json = thisuser.get('business_address_json','')
+        self.business_contact_method = thisuser.get('business_contact_method','')
+        self.business_phone_number = thisuser.get('business_phone_number','')
+        self.business_category_name = thisuser.get('business_category_name','')
+        self.overall_category_name = thisuser.get('overall_category_name','')
+        self.category_enum = thisuser.get('category_enum','')
+        self.category_name = thisuser.get('category_name','')
+        self.is_private = thisuser.get('is_private',False)
+        self.is_verified = thisuser.get('is_verified',False)
+        self.is_verified_by_mv4b = thisuser.get('is_verified_by_mv4b',False)
+        self.is_regulated_c18 = thisuser.get('is_regulated_c18',False)
+        self.mutual_followed_by_count = thisuser.get('mutual_followed_by_count',0)
+        self.mutual_followed_by_list = thisuser.get('mutual_followed_by_list',[])
+        self.pinned_channels_list_count = thisuser.get('pinned_channels_list_count',0)
+        self.profile_pic_url = thisuser.get('profile_pic_url','')
+        self.profile_pic_url_hd = thisuser.get('profile_pic_url_hd','')
+        self.requested_by_viewer = thisuser.get('requested_by_viewer',False)
+        self.should_show_category = thisuser.get('should_show_category',False)
+        self.should_show_public_contacts = thisuser.get('should_show_public_contacts',False)
+        self.show_account_transparency_details = thisuser.get('show_account_transparency_details',False)
+        self.transparency_label = thisuser.get('transparency_label','')
+        self.transparency_product = thisuser.get('transparency_product','')
+        self.username = thisuser.get('username','')
+        self.connected_fb_page = thisuser.get('connected_fb_page','')
+        self.pronouns = thisuser.get('pronouns',[])
+        
 class Instapost:
   def __init__(self):
     self.id = ''
