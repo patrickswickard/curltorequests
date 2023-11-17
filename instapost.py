@@ -64,8 +64,67 @@ class Instauser:
     self.pronouns = []
 
   def dumph(self):
-    # TODO
-    return {}
+    posthash['ai_agent_type'] = self.ai_agent_type
+    posthash['biography'] = self.biography
+    posthash['bio_links'] = self.bio_links
+    posthash['fb_profile_biolink'] = self.fb_profile_biolink
+    posthash['blocked_by_viewer'] = self.blocked_by_viewer
+    posthash['restricted_by_viewer'] = self.restricted_by_viewer
+    posthash['country_block'] = self.country_block
+    posthash['eimu_id'] = self.eimu_id
+    posthash['external_url'] = self.external_url
+    posthash['external_url_linkshimmed'] = self.external_url_linkshimmed
+    posthash['followed_by_count'] = self.followed_by_count
+    posthash['fbid'] = self.fbid
+    posthash['followed_by_viewer'] = self.followed_by_viewer
+    posthash['follow_count'] = self.follow_count
+    posthash['follows_viewer'] = self.follows_viewer
+    posthash['full_name'] = self.full_name
+    posthash['group_metadata'] = self.group_metadata
+    posthash['has_ar_effects'] = self.has_ar_effects
+    posthash['has_clips'] = self.has_clips
+    posthash['has_guides'] = self.has_guides
+    posthash['has_channel'] = self.has_channel
+    posthash['has_blocked_viewer'] = self.has_blocked_viewer
+    posthash['highlight_reel_count'] = self.highlight_reel_count
+    posthash['has_requested_viewer'] = self.has_requested_viewer
+    posthash['hide_like_and_view_count'] = self.hide_like_and_view_count
+    posthash['id'] = self.id
+    posthash['is_business_account'] = self.is_business_account
+    posthash['is_professional_account'] = self.is_professional_account
+    posthash['is_supervision_enabled'] = self.is_supervision_enabled
+    posthash['is_guardian_of_viewer'] = self.is_guardian_of_viewer
+    posthash['is_supervised_by_viewer'] = self.is_supervised_by_viewer
+    posthash['is_supervised_user'] = self.is_supervised_user
+    posthash['is_embeds_disabled'] = self.is_embeds_disabled
+    posthash['is_joined_recently'] = self.is_joined_recently
+    posthash['guardian_id'] = self.guardian_id
+    posthash['business_address_json'] = self.business_address_json
+    posthash['business_contact_method'] = self.business_contact_method
+    posthash['business_phone_number'] = self.business_phone_number
+    posthash['business_category_name'] = self.business_category_name
+    posthash['overall_category_name'] = self.overall_category_name
+    posthash['category_enum'] = self.category_enum
+    posthash['category_name'] = self.category_name
+    posthash['is_private'] = self.is_private
+    posthash['is_verified'] = self.is_verified
+    posthash['is_verified_by_mv4b'] = self.is_verified_by_mv4b
+    posthash['is_regulated_c18'] = self.is_regulated_c18
+    posthash['mutual_followed_by_count'] = self.mutual_followed_by_count
+    posthash['mutual_followed_by_list'] = self.mutual_followed_by_list
+    posthash['pinned_channels_list_count'] = self.pinned_channels_list_count
+    posthash['profile_pic_url'] = self.profile_pic_url
+    posthash['profile_pic_url_hd'] = self.profile_pic_url_hd
+    posthash['requested_by_viewer'] = self.requested_by_viewer
+    posthash['should_show_category'] = self.should_show_category
+    posthash['should_show_public_contacts'] = self.should_show_public_contacts
+    posthash['show_account_transparency_details'] = self.show_account_transparency_details
+    posthash['transparency_label'] = self.transparency_label
+    posthash['transparency_product'] = self.transparency_product
+    posthash['username'] = self.username
+    posthash['connected_fb_page'] = self.connected_fb_page
+    posthash['pronouns'] = self.pronouns
+    return posthash
 
   def dumps(self):
     thishash = self.dumph()
@@ -77,8 +136,66 @@ class Instauser:
     return postobject
 
   def readh(self,posthash):
-    # TODO
-    return {}
+    self.ai_agent_type = posthash['ai_agent_type']
+    self.biography = posthash['biography']
+    self.bio_links = posthash['bio_links']
+    self.fb_profile_biolink = posthash['fb_profile_biolink']
+    self.blocked_by_viewer = posthash['blocked_by_viewer']
+    self.restricted_by_viewer = posthash['restricted_by_viewer']
+    self.country_block = posthash['country_block']
+    self.eimu_id = posthash['eimu_id']
+    self.external_url = posthash['external_url']
+    self.external_url_linkshimmed = posthash['external_url_linkshimmed']
+    self.followed_by_count = posthash['followed_by_count']
+    self.fbid = posthash['fbid']
+    self.followed_by_viewer = posthash['followed_by_viewer']
+    self.follow_count = posthash['follow_count']
+    self.follows_viewer = posthash['follows_viewer']
+    self.full_name = posthash['full_name']
+    self.group_metadata = posthash['group_metadata']
+    self.has_ar_effects = posthash['has_ar_effects']
+    self.has_clips = posthash['has_clips']
+    self.has_guides = posthash['has_guides']
+    self.has_channel = posthash['has_channel']
+    self.has_blocked_viewer = posthash['has_blocked_viewer']
+    self.highlight_reel_count = posthash['highlight_reel_count']
+    self.has_requested_viewer = posthash['has_requested_viewer']
+    self.hide_like_and_view_count = posthash['hide_like_and_view_count']
+    self.id = posthash['id']
+    self.is_business_account = posthash['is_business_account']
+    self.is_professional_account = posthash['is_professional_account']
+    self.is_supervision_enabled = posthash['is_supervision_enabled']
+    self.is_guardian_of_viewer = posthash['is_guardian_of_viewer']
+    self.is_supervised_by_viewer = posthash['is_supervised_by_viewer']
+    self.is_supervised_user = posthash['is_supervised_user']
+    self.is_embed_disabled = posthash['is_embeds_disabled']
+    self.is_joined_recently = posthash['is_joined_recently']
+    self.guardian_id = posthash['guardian_id']
+    self.business_address_json = posthash['business_address_json']
+    self.business_contact_method = posthash['business_contact_method']
+    self.business_phone_number = posthash['business_phone_number']
+    self.business_category_name = posthash['business_category_name']
+    self.overall_category_name = posthash['overall_category_name']
+    self.category_enum = posthash['category_enum']
+    self.category_name = posthash['category_name']
+    self.is_private = posthash['is_private']
+    self.is_verified = posthash['is_verified']
+    self.is_verified_by_mv4b = posthash['is_verified_by_mv4b']
+    self.is_regulated_c18 = posthash['is_regulated_c18']
+    self.mutual_followed_by_count = posthash['mutual_followed_by_count']
+    self.mutual_followed_by_list = posthash['mutual_followed_by_list']
+    self.pinned_channels_list_count = posthash['pinned_channels_list_count']
+    self.profile_pic_url = posthash['profile_pic_url']
+    self.profile_pic_url_hd = posthash['profile_pic_url_hd']
+    self.requested_by_viewer = posthash['requested_by_viewer']
+    self.should_show_category = posthash['should_show_category']
+    self.should_show_public_contacts = posthash['should_show_public_contacts']
+    self.show_account_transparency_details = posthash['show_account_transparency_details']
+    self.transparency_label = posthash['transparency_label']
+    self.transparency_product = posthash['transparency_product']
+    self.username = posthash['username']
+    self.connected_fb_page = posthash['connected_fb_page']
+    self.pronouns = posthash['pronouns']
 
 class Instapost:
   def __init__(self):
@@ -288,5 +405,4 @@ class Instapost:
       thispost = this_child.readh()
       sidecar_to_children_list_posts.append(thispost)
     self.sidecar_to_children_list = posthash['sidecar_to_children_list']
-    return posthash
 
