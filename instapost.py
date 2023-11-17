@@ -1,5 +1,85 @@
 import json
 
+class Instauser:
+  def __init__(self):
+    self.ai_agent_type = ''
+    self.biography = ''
+    self.bio_links = []
+    self.fb_profile_biolink = ''
+    self.blocked_by_viewer = False
+    self.restricted_by_viewer = False
+    self.country_block = False
+    self.eimu_id = ''
+    self.external_url = ''
+    self.external_url_linkshimmed = ''
+    self.followed_by_count = 0
+    self.fbid = 0
+    self.followed_by_viewer = False
+    self.follow_count = 0
+    self.follows_viewer = False
+    self.full_name = False
+    self.group_metadata = ''
+    self.has_ar_effects = False
+    self.has_clips = False
+    self.has_guides = False
+    self.has_channel = False
+    self.has_blocked_viewer = False
+    self.highlight_reel_count = 0
+    self.has_requested_viewer = False
+    self.hide_like_and_view_count = False
+    self.id = ''
+    self.is_business_account = False
+    self.is_professional_account = False
+    self.is_supervision_enabled = False
+    self.is_guardian_of_viewer = False
+    self.is_supervised_by_viewer = False
+    self.is_supervised_user = False
+    self.is_embeds_disabled = False
+    self.is_joined_recently = False
+    self.guardian_id = ''
+    self.business_address_json = ''
+    self.business_contact_method = ''
+    self.business_phone_number = ''
+    self.business_category_name = ''
+    self.overall_category_name = ''
+    self.category_enum = ''
+    self.category_name = ''
+    self.is_private = False
+    self.is_verified = False
+    self.is_verified_by_mv4b = False
+    self.is_regulated_c18 = False
+    self.mutual_followed_by_count = 0
+    self.mutual_followed_by_list = []
+    self.pinned_channels_list_count = 0
+    self.profile_pic_url = ''
+    self.profile_pic_url_hd = ''
+    self.requested_by_viewer = False
+    self.should_show_category = False
+    self.should_show_public_contacts = False
+    self.show_account_transparency_details = False
+    self.transparency_label = ''
+    self.transparency_product = ''
+    self.username = ''
+    self.connected_fb_page = ''
+    self.pronouns = []
+
+  def dumph(self):
+    # TODO
+    return {}
+
+  def dumps(self):
+    thishash = self.dumph()
+    return json.dumps(thishash)
+
+  def reads(self,json):
+    thishash = json.reads(json)
+    postobject = self.Instauser()
+    return postobject
+
+  def readh(self,posthash):
+    # TODO
+    return {}
+
 class Instapost:
   def __init__(self):
     self.id = ''
