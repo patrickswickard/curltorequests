@@ -203,7 +203,7 @@ class Instauser:
   # method to get app id parameter which is probably static but maybe not?
   # in any case it is parsable at least for now
   # if this breaks try hard-coding it
-  def get_app_id(username):
+  def get_app_id(self,username):
     debug = False
     request_url = 'https://www.instagram.com/' + username + '/'
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'}
@@ -229,7 +229,7 @@ class Instauser:
           app_id = app_id_hits[0]
           return app_id
 
-  def get_first_set(username,app_id,sessionid):
+  def get_first_set(self,username,app_id,sessionid):
     request_url = 'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + username
     header_hash = {
     }
@@ -337,7 +337,12 @@ class Instauser:
         self.username = thisuser.get('username','')
         self.connected_fb_page = thisuser.get('connected_fb_page','')
         self.pronouns = thisuser.get('pronouns',[])
-        
+
+  def get_user_from_web(self,username,sessionid):
+    app_id = self.get_app_id(username)
+    response_hash = self.get_first_set(username,app_id,sessionid)
+    self.get_user_from_response_hash(response_hash)
+
 class Instapost:
   def __init__(self):
     self.id = ''
@@ -444,7 +449,7 @@ class Instapost:
     self.sidecar_to_children_list = my_sidecar_to_children_list
 
   # this really does not belong under posts but okay for now until we get maybe broader
-  def get_app_id(username):
+  def get_app_id(self,username):
     debug = False
     request_url = 'https://www.instagram.com/' + username + '/'
     headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0'}

@@ -11,5 +11,6 @@ secret = mysecret.Mysecret()
 sessionid = secret.sid
 
 my_user = instapost.Instauser()
+my_user.get_user_from_web(username,sessionid)
 
 print(my_user.dumps())
