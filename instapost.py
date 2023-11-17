@@ -257,10 +257,23 @@ class Instauser:
         self.eimu_id = thisuser.get('eimu_id','')
         self.external_url = thisuser.get('external_url','')
         self.external_url_linkshimmed = thisuser.get('external_url_linkshimmed','')
-        self.followed_by_count = thisuser.get('followed_by_count',0)
+        # derived
+        followed_by_count = 0
+        edge_followed_by = thisuser.get('edge_followed_by',{})
+        if edge_followed_by:
+          followed_by_count = edge_followed_by.get('count',0)
+        self.followed_by_count = followed_by_count
+        #######
         self.fbid = thisuser.get('fbid',0)
         self.followed_by_viewer = thisuser.get('followed_by_viewer',False)
         self.follow_count = thisuser.get('follow_count',0)
+        # derived
+        follow_count = 0
+        edge_follow = thisuser.get('edge_follow',{})
+        if edge_follow:
+          follow_count = edge_follow.get('count',0)
+        self.followed_by_count = followed_by_count
+        #######
         self.follows_viewer = thisuser.get('follows_viewer',False)
         self.full_name = thisuser.get('full_name','')
         self.group_metadata = thisuser.get('group_metadata','')
@@ -293,8 +306,24 @@ class Instauser:
         self.is_verified = thisuser.get('is_verified',False)
         self.is_verified_by_mv4b = thisuser.get('is_verified_by_mv4b',False)
         self.is_regulated_c18 = thisuser.get('is_regulated_c18',False)
-        self.mutual_followed_by_count = thisuser.get('mutual_followed_by_count',0)
-        self.mutual_followed_by_list = thisuser.get('mutual_followed_by_list',[])
+        # derived
+        mutual_followed_by_count = 0
+        edge_mutual_followed_by = thisuser.get('mutual_followed_by',{})
+        if edge_mutual_followed_by:
+          mutual_followed_by_count = edge_mutual_followed_by.get('count',0)
+        self.mutual_followed_by_count = mutual_followed_by_count
+        #######
+        mutual_followed_by_list = []
+        edge_mutual_followed_by = thisuser.get('mutual_followed_by',{})
+        if edge_mutual_followed_by:
+          thisedgelist = edge_mutual_followed_by.get('edges',[])
+          mutual_followed_by_list = []
+          for thisedge in thisedgelist:
+            thisnode = thisedge.get('node','')
+            if thisnode:
+              mutual_followed_by_list.append(thisnode)
+        self.mutual_followed_by_list = mutual_followed_by_list
+        #######
         self.pinned_channels_list_count = thisuser.get('pinned_channels_list_count',0)
         self.profile_pic_url = thisuser.get('profile_pic_url','')
         self.profile_pic_url_hd = thisuser.get('profile_pic_url_hd','')
