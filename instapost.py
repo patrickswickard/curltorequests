@@ -66,6 +66,7 @@ class Instauser:
     self.pronouns = []
 
   def dumph(self):
+    thishash = {}
     thishash['ai_agent_type'] = self.ai_agent_type
     thishash['biography'] = self.biography
     thishash['bio_links'] = self.bio_links
