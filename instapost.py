@@ -343,6 +343,113 @@ class Instauser:
     response_hash = self.get_first_set(username,app_id,sessionid)
     self.get_user_from_response_hash(response_hash)
 
+  def get_all_data_list(self,username,sessionid):
+    all_data_list = []
+    app_id = self.get_app_id(username)
+    response_hash = self.get_first_set(username,app_id,sessionid)
+    this_list = self.list_data_from_response_hash(response_hash)
+    all_data_list = all_data_list + this_list
+
+    # hard-coded, hopefully always the same
+    doc_id = '17991233890457762'
+    user_id = self.get_user_id_from_response_hash(response_hash)
+    end_cursor = self.get_end_cursor_from_response_hash(response_hash)
+    num = '50'
+
+    while end_cursor:
+      next_response_hash = self.get_next_response_hash(doc_id,app_id,user_id,end_cursor,num,sessionid)
+      this_list = self.list_data_from_response_hash(next_response_hash)
+      all_data_list = all_data_list + this_list
+      doc_id = '17991233890457762'
+      user_id = user_id
+      end_cursor = self.get_end_cursor_from_response_hash(next_response_hash)
+      num = '50'
+    return all_data_list
+
+  def list_data_from_response_hash(self,response_hash):
+    batch_list = []
+    data = response_hash['data']
+    user = data['user']
+    edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
+    page_info = edge_owner_to_timeline_media['page_info']
+    edges = edge_owner_to_timeline_media['edges']
+    has_next_page = page_info['has_next_page']
+    end_cursor = ''
+    if has_next_page:
+      end_cursor = page_info['end_cursor']
+    for thisedge in edges:
+      node = thisedge['node']
+      post_object = Instapost()
+      post_object.process_post(node)
+      if post_object.sidecar_to_children_list:
+        for my_post_object in post_object.sidecar_to_children_list:
+          #batch_list.append(my_post_object.display_url)
+          batch_list.append(my_post_object.dumph())
+          #batch_list.append(my_post_object.dumph(self))
+      else:
+        #batch_list.append(post_object.display_url)
+        batch_list.append(post_object.dumph())
+        #batch_list.append(post_object.type())
+    return batch_list
+
+  def get_user_id_from_response_hash(self,response_hash):
+    data = response_hash['data']
+    user = data['user']
+    user_id = user['id']
+    return user_id
+
+  def get_end_cursor_from_response_hash(self,response_hash):
+    data = response_hash['data']
+    user = data['user']
+    edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
+    page_info = edge_owner_to_timeline_media['page_info']
+    has_next_page = page_info['has_next_page']
+    end_cursor = ''
+    if has_next_page:
+      end_cursor = page_info['end_cursor']
+    return end_cursor
+
+  def get_next_response_hash(self,doc_id,app_id,user_id,end_cursor,num,sessionid):
+    if end_cursor:
+      request_url = 'https://www.instagram.com/graphql/query/?doc_id=' + doc_id + '&variables=%7B%22id%22%3A%22' + user_id + '%22%2C%22after%22%3A%22' + end_cursor + '%22%2C%22first%22%3A' + num + '%7D'
+      header_hash = {
+      }
+      header_hash['Cookie'] = 'sessionid=' + sessionid + '; ds_user_id=CAFE'
+      header_hash['x-ig-app-id'] = app_id
+      headers = header_hash
+      response = requests.get(request_url, headers=headers)
+      response_hash = json.loads(response.text)
+      outfilename = 'NEXTSET.json'
+      thisoutfile = open(outfilename, 'w')
+      thisoutfile.write(response.text)
+      return response_hash
+
+  def list_data_from_response_hash(self,response_hash):
+    batch_list = []
+    data = response_hash['data']
+    user = data['user']
+    edge_owner_to_timeline_media = user['edge_owner_to_timeline_media']
+    page_info = edge_owner_to_timeline_media['page_info']
+    edges = edge_owner_to_timeline_media['edges']
+    has_next_page = page_info['has_next_page']
+    end_cursor = ''
+    if has_next_page:
+      end_cursor = page_info['end_cursor']
+    for thisedge in edges:
+      node = thisedge['node']
+      post_object = Instapost()
+      post_object.process_post(node)
+      if post_object.sidecar_to_children_list:
+        for my_post_object in post_object.sidecar_to_children_list:
+          #batch_list.append(my_post_object.display_url)
+          batch_list.append(my_post_object.dumph())
+          #batch_list.append(my_post_object.dumph(self))
+      else:
+        #batch_list.append(post_object.display_url)
+        batch_list.append(post_object.dumph())
+        #batch_list.append(post_object.type())
+    return batch_list
+
 class Instapost:
   def __init__(self):
     self.id = ''
