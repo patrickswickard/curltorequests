@@ -4,7 +4,7 @@ import json
 import shutil
 import mysecret
 import time
-import instapost
+import instatools
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
@@ -22,7 +22,7 @@ def download_single_photo(source,filename):
   with open(photo_filename, 'wb') as out_file:
     shutil.copyfileobj(url_response.raw, out_file)
 
-my_user = instapost.Instauser()
+my_user = instatools.Instauser()
 my_user.get_user_from_web(username,sessionid)
 
 all_data_list = my_user.get_all_data_list(username, sessionid)

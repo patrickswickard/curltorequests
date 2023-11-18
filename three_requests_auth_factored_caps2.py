@@ -4,7 +4,7 @@ import json
 import shutil
 import mysecret
 import time
-import instapost
+import instatools
 
 #username = 'vintage_bmore_graffiti'
 #username = 'cannibal_corpse_limericks'
@@ -81,7 +81,7 @@ def list_links_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
     node = thisedge['node']
-    post_object = instapost.Instapost()
+    post_object = instatools.Instapost()
     post_object.process_post(node)
     if post_object.sidecar_to_children_list:
       for my_post_object in post_object.sidecar_to_children_list:
@@ -103,7 +103,7 @@ def list_data_from_response_hash(response_hash):
     end_cursor = page_info['end_cursor']
   for thisedge in edges:
     node = thisedge['node']
-    post_object = instapost.Instapost()
+    post_object = instatools.Instapost()
     post_object.process_post(node)
     if post_object.sidecar_to_children_list:
       for my_post_object in post_object.sidecar_to_children_list:
