@@ -8,3 +8,6 @@ Curl requests that can work against websites can be massaged out of programs suc
 This likely won't do anything very clever with cookies or redirects and is untested for that, but it is working for some basic cases
 
 TODO parse the url to visit instead of hard-coding it.  Take a closer look at cookies.
+
+
+DEPRECATION NOTICE - use tools from instaburglar instead
