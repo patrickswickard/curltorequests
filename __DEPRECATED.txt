@@ -1,0 +1,1 @@
+This is all deprecated, see instaburglar and in particular instatools.py in that repo
